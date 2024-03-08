@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Claim Trust</title>
+	<link rel="stylesheet" href="styles.css">
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+</head>
+<body>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+body{
+   background-color: #f3f5f9;
+}
+
+.wrapper{
+  display: flex;
+  position: relative;
+}
+
+.wrapper .sidebar{
+  width: 200px;
+  height: 100%;
+  background: #4b4276;
+  padding: 30px 0px;
+  position: fixed;
+}
+
+.wrapper .sidebar h2{
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.wrapper .sidebar ul li{
+  padding: 15px;
+  border-bottom: 1px solid #bdb8d7;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}    
+
+.wrapper .sidebar ul li a{
+  color: #bdb8d7;
+  display: block;
+}
+
+.wrapper .sidebar ul li a .fas{
+  width: 25px;
+}
+
+.wrapper .sidebar ul li:hover{
+  background-color: #594f8d;
+}
+h1 {
+  font-size: 24px;
+  color: #4b4276;
+  text-align: center;
+  margin-top: 20px;
+}
+
+    
+.wrapper .sidebar ul li:hover a{
+  color: #fff;
+}
+ 
+.wrapper .sidebar .social_media{
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.wrapper .sidebar .social_media a{
+  display: block;
+  width: 40px;
+  background: #594f8d;
+  height: 40px;
+  line-height: 45px;
+  text-align: center;
+  margin: 0 5px;
+  color: #bdb8d7;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.wrapper .main_content{
+  width: 100%;
+  margin-left: 200px;
+}
+
+.wrapper .main_content .header{
+  padding: 20px;
+  background: #fff;
+  color: #717171;
+  border-bottom: 1px solid #e0e4e8;
+}
+
+.wrapper .main_content .info{
+  margin: 20px;
+  color: #717171;
+  line-height: 25px;
+}
+
+.wrapper .main_content .info div{
+  margin-bottom: 20px;
+}
+
+.container {
+  max-width: 500px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.container form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.container label {
+  font-weight: bold;
+}
+
+.container input[type="text"],
+.container input[type="number"],
+.container select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.container button {
+  grid-column: span 2;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 3px;
+  background-color: #4b4276;
+  color: #fff;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background-color: #594f8d;
+}
+
+</style>
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Claim Trust</h2>
+        <ul>
+          <li><a href="./dashboard"><i class="fas fa-home"></i>Home</a></li>
+          <li><a href="./import_data"><i class="fas fa-user"></i>Import Data</a></li>
+          <li><a href="./predict"><i class="fas fa-address-card"></i>Add Data</a></li>
+         
+          <li><a href="./logout"><i class="fas fa-blog"></i>Logout</a></li>
+        </ul> 
+        <div class="social_media">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="main_content">
+        <div class="header">Welcome to our website.</div>
+        <div class="container">
+          <h2>Add Data</h2>
+          <form action="{{ url_for('predict') }}" method="POST">
+            <label for="Marital Status">Marital Status:</label>
+            <select id="Marital Status" name="MaritalStatus">
+                  <option value=2>Never Marrried</option>
+                  <option value=1>Marrried civ spouse</option>
+                  <option value=3>Divorced</option>
+                  <option value=4>Widowed</option>
+                  <option value=5>Married Spouse Absent</option>
+                  <option value=7>Separated</option>
+                  <option value=6>Married AF Spouse</option>
+                </select>
+
+                <label for="Hours_Week">Hours/Week:</label>
+                <input type="number" id="Hours_Week" name="Hours_Week" required>
+
+                <label for="Gender">Gender:</label>
+                <select id="Gender" name="Gender">
+                  <option value=0>Male</option>
+                  <option value=1>Female</option>
+                </select>
+
+                <label for="Occupation">Occupation:</label>
+              <select id="Occupation" name="Occupation">
+                <option value=1>Prof-specialty</option>
+                <option value=2>Exec-managerial</option>
+                <option value=3>Craft-repair</option>
+                <option value=4>Adm-clerical</option>
+                <option value=5>Sales</option>
+                <option value=6>Other-service</option>
+                <option value=7>Machine-op-inspct</option>
+                <option value=8>Transport-moving</option>
+                <option value=9>Handlers-cleaners</option>
+                <option value=10>Farming-fishing</option>
+                <option value=11>Tech-support</option>
+                <option value=12>Protective-serv</option>
+                <option value=13>Priv-house-serv</option>
+                <option value=14>Armed-Forces</option>
+              </select>
+
+                  <label for="CustomerID">Customer ID:</label>
+                  <input type="text" id="CustomerID" name="CustomerID" required>
+
+      
+                  <label for="Age">Age:</label>
+                  <input type="number" id="Age" name="Age" required>
+                
+                  <label for="months_as_customer">Months as Customer:</label>
+                  <input type="number" id="months_as_customer" name="months_as_customer" required>
+                
+                  <label for="policy_deductable">Policy Deductable:</label>
+                  <input type="number" id="policy_deductable" name="policy_deductable" required>
+                
+                  <label for="policy_annual_premium">Policy Annual Premium:</label>
+                  <input type="number" id="policy_annual_premium" name="policy_annual_premium" required>
+                
+                  <label for="insured_relationship">Insured Relationship:</label>
+                  <select id="insured_relationship" name="insured_relationship">
+                  <option value=2>Other relative</option>
+                  <option value=1>Child</option>
+                  <option value=3>Not in Family</option>
+                  <option value=4>Husband</option>
+                  <option value=5>Wife</option>
+                  <option value=6>Unmarried</option>
+                  </select>
+                
+                  <label for="capital-gains">Capital Gains:</label>
+                  <input type="number" id="capital-gains" name="capital-gains" required>
+                
+                  <label for="capital-loss">Capital Loss:</label>
+                  <input type="text" id="capital-loss" name="capital-loss" required>
+
+
+                <label for="incident_type">Incident Type:</label>
+                <select id="incident_type" name="incident_type">
+                  <option value=1>Multi-vehicle Collision</option>
+                  <option value=4>Parked Car</option>
+                  <option value=2>Single Vehicle Collision</option>
+                  <option value=3>Vehicle Theft</option>
+                </select>
+
+                <label for="collision_type">collision Type:</label>
+                <select id="collision_type" name="collision_type">
+                  <option value=1>Rear Collision</option>
+                  <option value=2>Side Collision</option>
+                  <option value=3>Front Collision</option>
+                </select>
+  <!-- Incident Severnity -->
+                <label for="incident_severity">Incident Severity:</label>
+                <select id="incident_severity" name="incident_severity">
+                  <option value=1>Minor Damage</option>
+                  <option value=2>Total Loss</option>
+                  <option value=3>Major Damage</option>
+                  <option value=4>Trivial Damage</option>
+                </select>
+                
+                <label for="authorities_contacted">Authorities Contacted:</label>
+                <select id="authorities_contacted" name="authorities_contacted">
+                  <option value=1>Police</option>
+                  <option value=2>Fire</option>
+                  <option value=3>Other</option>
+                  <option value=4>Ambulance</option>
+                  <option value=5>None</option>
+                </select>
+
+                <label for="number_of_vehicles_involved">Number of Vehicles Involved:</label>
+                <input type="number" id="number_of_vehicles_involved" name="number_of_vehicles_involved">
+
+                <label for="property_damage">Property Damage:</label>
+                <input type="number" id="property_damage" name="property_damage">
+
+                <label for="bodily_injuries">Bodily Injuries:</label>
+                <input type="number" id="bodily_injuries" name="bodily_injuries">
+
+                <label for="witnesses">Witnesses:</label>
+                <input type="number" id="witnesses" name="witnesses">
+
+                <label for="police_report_available">Police Report Available:</label>
+                <select id="police_report_available" name="police_report_available">
+                  <option value=1>Yes</option>
+                  <option value=0>No</option>
+                </select>
+
+                <label for="total_claim_amount">Total Claim Amount:</label>
+                <input type="number" id="total_claim_amount" name="total_claim_amount">
+
+                <label for="injury_claim">Injury Claim:</label>
+                <input type="number" id="injury_claim" name="injury_claim">
+
+                <label for="property_claim">Property Claim:</label>
+                <input type="number" id="property_claim" name="property_claim">
+
+                <label for="vehicle_claim">Vehicle Claim:</label>
+                <input type="number" id="vehicle_claim" name="vehicle_claim">
+
+                <label for="State">State:</label>
+                <select id="State" name="State">
+                    <option value=6>Goa</option>
+                    <option value=24>Telangana</option>
+                    <option value=3>Assam</option>
+                    <option value=5>Chhattisgarh</option>
+                    <option value=2>Arunachal Pradesh</option>
+                    <option value=23>Tamil Nadu</option>
+                    <option value=29>West Bengal</option>
+                    <option value=11>Karnataka</option>
+                    <option value=10>Jharkhand</option>
+                    <option value=15>Manipur</option>
+                    <option value=9>Himachal Pradesh</option>
+                    <option value=12>Kerala</option>
+                    <option value=25>Tripura</option>
+                    <option value=8>Haryana</option>
+                    <option value=14>Maharashtra</option>
+                    <option value=22>Sikkim</option>
+                    <option value=26>Uttar Pradesh</option>
+                    <option value=19>Odisha</option>
+                    <option value=20>Punjab</option>
+                    <option value=21>Rajasthan</option>
+                    <option value=18>Nagaland</option>
+                    <option value=7>Gujarat</option>
+                    <option value=4>Bihar</option>
+                    <option value=27>Uttarakhand</option>
+                    <option value=1>Andhra Pradesh</option>
+                    <option value=13>Madhya Pradesh</option>
+                    <option value=16>Meghalaya</option>
+                    <option value=17>Mizoram</option>
+                </select> 
+
+                <label for="vehicle_age">Vehicle age:</label>
+                <input type="number" id="vehicle_age" name="vehicle_age">
+
+
+                <label for="work">Work:</label>
+              <select id="work" name="work">
+                <option value=1>Private</option>
+                <option value=2>Self-emp-not-inc</option>
+                <option value=3>Local-gov</option>
+                <option value=4>State-gov</option>
+                <option value=5>Self-emp-inc</option>
+                <option value=6>Federal-gov</option>
+                <option value=7>Without-pay</option>
+                <option value=8>Never-worked</option>
+              </select>
+            <button type="submit">Predictions</button>
+          </form>
+          <div>
+            <h1>{{prediction_text}}</h1>
+          </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+# Example render.yaml configuration
+buildCommand: pip install -r requirements.txt
+pythonVersion: 3.7

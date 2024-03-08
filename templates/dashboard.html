@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Claim Trust</title>
+	<link rel="stylesheet" href="./">
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+</head>
+<body>
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+/* body */
+body{
+   background-color: #f3f5f9;
+}
+
+.wrapper{
+  display: flex;
+  position: relative;
+}
+
+.wrapper .sidebar{
+  width: 200px;
+  height: 100%;
+  background: #4b4276;
+  padding: 30px 0px;
+  position: fixed;
+}
+
+.wrapper .sidebar h2{
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.wrapper .sidebar ul li{
+  padding: 15px;
+  border-bottom: 1px solid #bdb8d7;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}    
+
+.wrapper .sidebar ul li a{
+  color: #bdb8d7;
+  display: block;
+}
+
+.wrapper .sidebar ul li a .fas{
+  width: 25px;
+}
+
+.wrapper .sidebar ul li:hover{
+  background-color: #594f8d;
+}
+    
+.wrapper .sidebar ul li:hover a{
+  color: #fff;
+}
+ 
+.wrapper .sidebar .social_media{
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.wrapper .sidebar .social_media a{
+  display: block;
+  width: 40px;
+  background: #594f8d;
+  height: 40px;
+  line-height: 45px;
+  text-align: center;
+  margin: 0 5px;
+  color: #bdb8d7;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.wrapper .main_content{
+  width: 100%;
+  margin-left: 200px;
+}
+
+.wrapper .main_content .header{
+  padding: 20px;
+  background: #fff;
+  color: #717171;
+  border-bottom: 1px solid #e0e4e8;
+}
+
+.wrapper .main_content .info{
+  margin: 20px;
+  color: #717171;
+  line-height: 25px;
+}
+
+.wrapper .main_content .info div{
+  margin-bottom: 20px;
+}
+</style>
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Claim Trust</h2>
+        <ul>
+            <li><a href="./dashboard"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="./import_data"><i class="fas fa-user"></i>Import Data</a></li>
+            <li><a href="./predict"><i class="fas fa-address-card"></i>Add Data</a></li>
+           
+            <li><a href="./logout"><i class="fas fa-blog"></i>Logout</a></li>
+        </ul> 
+        <div class="social_media">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="main_content">
+        <div class="header">Welcome to our website.</div>  
+        <div class="info">
+          <div>Machine learning-based insurance fraud detection is a powerful approach that leverages advanced algorithms and techniques to identify fraudulent activities within the insurance industry. By analyzing vast amounts of data and detecting patterns, machine learning models can effectively identify suspicious claims, policyholder behaviors, and other fraudulent activities. This technology plays a crucial role in helping insurance companies mitigate financial losses, maintain trust with genuine policyholders, and ensure the overall stability of the insurance market.</div>
+          <div>One key advantage of machine learning-based fraud detection is its ability to analyze large and complex datasets. By training models on historical data that includes both fraudulent and non-fraudulent cases, machine learning algorithms can learn to recognize subtle patterns and indicators of fraud. These models can then be applied to real-time data, allowing insurance companies to quickly identify suspicious claims and take appropriate actions. This approach offers significant improvements over traditional rule-based systems, as machine learning models can adapt and evolve based on new fraud patterns and emerging trends.</div>
+          <div>Machine learning models for insurance fraud detection often employ various techniques, such as anomaly detection, predictive modeling, and clustering. Anomaly detection focuses on identifying unusual activities or outliers that deviate from the norm. Predictive modeling utilizes historical data to predict the likelihood of fraud for new claims, policyholders, or scenarios. Clustering techniques group similar cases together, enabling insurers to identify clusters associated with fraudulent activities. These techniques work in tandem, providing a comprehensive framework for fraud detection that enhances the accuracy and efficiency of fraud identification.</div>
+      </div>
+    </div>
+</div>
+
+</body>
+</html>

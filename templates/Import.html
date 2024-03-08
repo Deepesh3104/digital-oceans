@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='import.css') }}">
+
+    <title>Claim Trust</title>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .upload-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .upload-form input[type="file"] {
+            display: none;
+        }
+        
+        .upload-form label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .pagination button {
+            margin: 5px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .search-container input[type="text"] {
+            padding: 8px;
+        }
+        
+        .search-container button {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .prediction-button {
+            display: block;
+            margin: 10px auto;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Claim Trust</h2>
+            <ul>
+                <li><a href="./dashboard"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="./import_data"><i class="fas fa-user"></i>Import Data</a></li>
+            <li><a href="./predict"><i class="fas fa-address-card"></i>Add Data</a></li>
+           
+            <li><a href="./logout"><i class="fas fa-blog"></i>Logout</a></li>
+            </ul> 
+            <div class="social_media">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="main_content">
+            <div class="header">Welcome to our website.</div>  
+            <div class="container">
+                <h1>CSV File Upload</h1>
+                <div class="upload-form">
+                    <input type="file" id="csv-file" accept=".csv">
+                    <label for="csv-file">Upload CSV File</label>
+                </div>
+                
+                <div class="table-container">
+                    <table id="data-table">
+                        <tbody>
+                            <!-- Data will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <!-- Pagination buttons will be dynamically added here -->
+                </div>
+                <button id="prediction-button" class="prediction-button">Make Prediction</button>
+                <h3 id="prediction_text"></h3>
+                <h3 id="accuracy-text"></h3>
+                <table id="prediction-table">
+                    <thead>
+                        <tr>
+                            <th>Record</th>
+                            <th>Prediction</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prediction-table-body">
+                        <!-- Prediction results will be dynamically added here -->
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables to store pagination information
+        let currentPage = 1;
+        const recordsPerPage = 20;
+        let currentRecords = [];
+
+        // Function to handle CSV file upload
+        function handleFileUpload(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('csv-file');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const contents = e.target.result;
+                    const records = parseCSV(contents);
+                    currentRecords = records;
+                    displayUploadedData(records);
+                    displayRecords();
+                    setupPagination();
+                };
+                reader.readAsText(file);
+
+                fetch('/import_data', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const predictionTableBody = document.getElementById('prediction-table-body');
+                        predictionTableBody.innerHTML = '';
+
+                        data.prediction_text.forEach((prediction, index) => {
+                            const row = document.createElement('tr');
+                            const recordCell = document.createElement('td');
+                            const predictionCell = document.createElement('td');
+
+                            recordCell.textContent = index + 1;
+                            predictionCell.textContent = prediction;
+
+                            row.appendChild(recordCell);
+                            row.appendChild(predictionCell);
+
+                            predictionTableBody.appendChild(row);
+                        });
+
+                        const accuracyText = document.querySelector('#accuracy-text');
+                        accuracyText.textContent = 'Ensemble Accuracy: ' + data.ensemble_accuracy;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert('Please select a CSV file.');
+            }
+        }
+
+        // Function to parse CSV data and store records
+        function parseCSV(contents) {
+            const lines = contents.split('\n');
+            const records = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                const cells = lines[i].split(',');
+
+                if (cells.length > 0) {
+                    const record = cells.map(cell => cell.trim());
+                    records.push(record);
+                }
+            }
+
+            currentRecords = records;
+        }
+
+                // Function to display records based on pagination
+                function displayRecords() {
+            const tableBody = document.querySelector('#data-table tbody');
+            tableBody.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * recordsPerPage;
+            const endIndex = startIndex + recordsPerPage;
+            const recordsToDisplay = currentRecords.slice(startIndex, endIndex);
+
+            for (let i = 0; i < recordsToDisplay.length; i++) {
+                const record = recordsToDisplay[i];
+                const row = document.createElement('tr');
+
+                for (let j = 0; j < record.length; j++) {
+                    const cell = document.createElement('td');
+                    cell.textContent = record[j];
+                    row.appendChild(cell);
+                }
+
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Function to set up pagination buttons
+        function setupPagination() {
+            const totalRecords = currentRecords.length;
+            const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+            const paginationContainer = document.querySelector('.pagination');
+            paginationContainer.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    displayRecords();
+                });
+                paginationContainer.appendChild(button);
+            }
+        }
+
+        // Function to handle search
+        function handleSearch() {
+            const searchInput = document.getElementById('search-input');
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            if (searchTerm !== '') {
+                const filteredRecords = currentRecords.filter(record => {
+                    return record.some(cell => cell.toLowerCase().includes(searchTerm));
+                });
+
+                currentRecords = filteredRecords;
+                currentPage = 1;
+                displayRecords();
+                setupPagination();
+            } else {
+                alert('Please enter a search term.');
+            }
+        }
+
+        // Function to handle prediction
+        function handlePrediction() {
+            const fileInput = document.getElementById('csv-file');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/import_data', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const predictionTableBody = document.getElementById('prediction-table-body');
+                        predictionTableBody.innerHTML = '';
+
+                        data.prediction_text.forEach((prediction, index) => {
+                            const row = document.createElement('tr');
+                            const recordCell = document.createElement('td');
+                            const predictionCell = document.createElement('td');
+
+                            recordCell.textContent = index + 1;
+                            predictionCell.textContent = prediction;
+
+                            row.appendChild(recordCell);
+                            row.appendChild(predictionCell);
+
+                            predictionTableBody.appendChild(row);
+                        });
+
+                        const accuracyText = document.querySelector('#accuracy-text');
+                        accuracyText.textContent = 'Ensemble Accuracy: ' + data.ensemble_accuracy;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert('Please select a CSV file.');
+            }
+        }
+
+        // Add event listeners
+        const uploadForm = document.querySelector('.upload-form');
+        uploadForm.addEventListener('change', handleFileUpload);
+
+        const searchButton = document.getElementById('search-button');
+        searchButton.addEventListener('click', handleSearch);
+
+        const predictionButton = document.getElementById('prediction-button');
+        predictionButton.addEventListener('click', handlePrediction);
+    </script>
+</body>
+</html>
+
